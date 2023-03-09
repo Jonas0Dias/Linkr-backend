@@ -1,6 +1,6 @@
 import { db } from "../config/database.js";
 
-export async function insertPost(post) {
+export async function addPostRepository(post) {
 	return await db.query(
 		`INSERT INTO posts (user_id, url, texto) VALUES ($1, $2, $3) RETURNING ID`,
 		[post.userId, post.url, post.text]

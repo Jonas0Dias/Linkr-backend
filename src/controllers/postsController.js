@@ -2,22 +2,27 @@ import { hash } from "bcrypt";
 import { insertHashtag } from "../repositories/hashtagsRepository.js";
 import {
 	getPostsRepository,
-	insertPost,
+	addPostRepository,
 } from "../repositories/postsRepository.js";
 
 export async function addPost(req, res) {
-	const { url, text } = req.body;
-	const userId = res.locals.userId;
+	try {
+		const { url, text } = req.body;
+		const userId = res.locals.userId;
 
-	const postId = await insertPost({ url, text, userId });
+		const postId = await addPostRepository({ url, text, userId });
 
-	if (text) {
-		const hashtags = text.match(/#\w+\b/g);
-		for (let i = 0; i < hashtags.length; i++) {
-			await insertHashtag(postId.rows[0].id, hashtags[i]);
+		if (text) {
+			const hashtags = text.match(/#\w+\b/g);
+			for (let i = 0; i < hashtags.length; i++) {
+				await insertHashtag(postId.rows[0].id, hashtags[i]);
+			}
 		}
+		res.sendStatus(201);
+	} catch (error) {
+		console.log(error);
+		return res.sendStatus(500);
 	}
-	res.sendStatus(201);
 }
 
 export async function getPosts(req, res) {
