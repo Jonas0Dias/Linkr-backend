@@ -22,3 +22,26 @@ export async function getPostsRepository() {
         `
 	);
 }
+
+export async function deletePostRepository(postId) {
+	return await db.query(`DELETE FROM posts WHERE id = $1`, [postId]);
+}
+
+export async function deletePostHashtagsRepo(postId) {
+	return await db.query(`DELETE FROM posts_hashtags WHERE post_id = $1`, [
+		postId,
+	]);
+}
+
+export async function deletePostLikesRepo(postId) {
+	return await db.query(`DELETE FROM posts_liked WHERE post_id = $1`, [
+		postId,
+	]);
+}
+
+export async function editPostRepository(postId, text) {
+	return await db.query(`UPDATE posts SET texto = $1 WHERE id = $2`, [
+		text,
+		postId,
+	]);
+}
