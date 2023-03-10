@@ -5,3 +5,9 @@ export async function findUserIdByToken(token) {
 		token,
 	]);
 }
+
+export async function findUserIdByPostId(postId) {
+	return db.query(`SELECT user_id AS "id" FROM posts WHERE posts.id = $1`, [
+		postId,
+	]);
+}
